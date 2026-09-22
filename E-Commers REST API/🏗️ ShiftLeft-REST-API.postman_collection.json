@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "a09e8b01-07af-410f-8f8f-cbb232e321fb",
+    "_postman_id": "93eab4b5-5935-428d-aaea-2b7805be1338",
     "name": "🏗️ ShiftLeft-REST-API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "52498734"
@@ -16,7 +16,7 @@
               "name": "UserGetTests",
               "item": [
                 {
-                  "name": "Test case 1: Get all users",
+                  "name": "TC-1: Get all users",
                   "event": [
                     {
                       "listen": "test",
@@ -30,6 +30,20 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.data).to.be.an(\"array\");\r",
                           "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches Schema\", function () {\r",
+                          "    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"userListSchema\")));\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
                           ""
                         ],
                         "type": "text/javascript",
@@ -64,12 +78,13 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 2: Get user with valid ID",
+                  "name": "TC-2: Get user with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
                       "script": {
                         "exec": [
+                          "// Retreive base url and base path from collection environment variables\r",
                           "let baseUrl = pm.collectionVariables.get(\"BASE_URL\");\r",
                           "let basePath = pm.collectionVariables.get(\"BASE_PATH\");\r",
                           "\r",
@@ -79,6 +94,7 @@
                           "    basePath = pm.environment.get(\"BASE_PATH\");\r",
                           "}\r",
                           "\r",
+                          "// Define http request\r",
                           "const createUserRequest = {\r",
                           "\r",
                           "    url: `${baseUrl}${basePath}/users`,\r",
@@ -96,6 +112,7 @@
                           "    }\r",
                           "};\r",
                           "\r",
+                          "// Retreive user ID \r",
                           "pm.sendRequest(createUserRequest, function (error, response) {\r",
                           "\r",
                           "    if (error) {\r",
@@ -116,7 +133,6 @@
                           "    pm.variables.set(\"validUserID\", body.data.id); // save locally\r",
                           "\r",
                           "});\r",
-                          "\r",
                           ""
                         ],
                         "type": "text/javascript",
@@ -136,7 +152,10 @@
                           "    const response = pm.response.json();\r",
                           "    pm.expect(response.data.id).to.exist;\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"userSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -167,7 +186,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 3: Get user with non existing ID",
+                  "name": "TC-3: Get user with non existing ID",
                   "event": [
                     {
                       "listen": "test",
@@ -181,7 +200,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"not found\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -212,7 +234,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 4: Get user with invalid ID format",
+                  "name": "TC-4: Get user with invalid ID format",
                   "event": [
                     {
                       "listen": "test",
@@ -226,7 +248,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -257,7 +282,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 5: Search user by role",
+                  "name": "TC-5: Search user by role",
                   "event": [
                     {
                       "listen": "test",
@@ -275,7 +300,10 @@
                           "        pm.expect(user.role).to.be.oneOf(allowedRoles);\r",
                           "    });\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches Schema\", function () {\r",
+                          "    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"userListSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -305,7 +333,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 6: Search users using multiple filter criteria",
+                  "name": "TC-6: Search users using multiple filter criteria",
                   "event": [
                     {
                       "listen": "test",
@@ -370,7 +398,7 @@
               "name": "UserPostTests",
               "item": [
                 {
-                  "name": "Test case 7: Create user with valid details",
+                  "name": "TC-7: Create user with valid details",
                   "event": [
                     {
                       "listen": "test",
@@ -396,7 +424,10 @@
                           "    pm.expect(body.data.email).to.be.eq(pm.variables.get(\"USER_EMAIL\"));\r",
                           "    pm.expect(body.data.role).to.be.eq(pm.variables.get(\"USER_ROLE\"));\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"userSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -449,7 +480,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 8: Create user with non existing role",
+                  "name": "TC-8: Create user with non existing role",
                   "event": [
                     {
                       "listen": "test",
@@ -464,7 +495,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"allowed values\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -516,7 +550,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 9: Create user with invalid email format",
+                  "name": "TC-9: Create user with invalid email format",
                   "event": [
                     {
                       "listen": "test",
@@ -531,7 +565,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -584,7 +621,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 10: Create user with empty name",
+                  "name": "TC-10: Create user with empty name",
                   "event": [
                     {
                       "listen": "test",
@@ -599,7 +636,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"fewer than\")\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -657,7 +697,7 @@
               "name": "UserUpdateTests",
               "item": [
                 {
-                  "name": "Test case 11: Update user with valid details",
+                  "name": "TC-11: Update user with valid details",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -739,14 +779,16 @@
                           "    pm.expect(body.data.id).to.exist;\r",
                           "});\r",
                           "\r",
-                          "\r",
                           "pm.test(\"Response body data matches the updated values\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.data.name).to.be.eq(pm.variables.get(\"USER_NAME_UPDATED\"));\r",
                           "    pm.expect(body.data.email).to.be.eq(pm.variables.get(\"USER_EMAIL_UPDATED\"));\r",
                           "    pm.expect(body.data.role).to.be.eq(pm.variables.get(\"USER_ROLE_UPDATED\"));\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"userSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -786,7 +828,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 12: Update user with empty email",
+                  "name": "TC-12: Update user with empty email",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -851,7 +893,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -891,7 +936,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 13: Update user with name exceeding max length",
+                  "name": "TC-13: Update user with name exceeding max length",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -957,7 +1002,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"NOT have more than 100 characters\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1002,7 +1050,7 @@
               "name": "UserDeleteTests",
               "item": [
                 {
-                  "name": "Test case 14: Delete user with valid ID",
+                  "name": "TC-14: Delete user with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1098,7 +1146,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 15: Delete user with non existing ID",
+                  "name": "TC-15: Delete user with non existing ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1122,6 +1170,10 @@
                           "pm.test(\"Response body message indicates user was not found\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.eq(\"user not found\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -1153,7 +1205,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 16: Delete user with invalid ID format",
+                  "name": "TC-16: Delete user with invalid ID format",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1177,6 +1229,10 @@
                           "pm.test(\"Response body message indicates invalid ID format\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -1218,7 +1274,7 @@
               "name": "ProductGetTests",
               "item": [
                 {
-                  "name": "Test case 17: Get all products",
+                  "name": "TC-17: Get all products",
                   "event": [
                     {
                       "listen": "test",
@@ -1232,11 +1288,21 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.data).to.be.an(\"array\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches Schema\", function () {\r",
+                          "    pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"productListSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
                         "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "packages": {},
+                        "type": "text/javascript"
                       }
                     }
                   ],
@@ -1262,7 +1328,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 18: Get product with valid ID",
+                  "name": "TC-18: Get product with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1316,6 +1382,7 @@
                           "    pm.variables.set(\"validProductID\", body.data.id); // save locally\r",
                           " \r",
                           "});\r",
+                          "\r",
                           ""
                         ],
                         "type": "text/javascript",
@@ -1335,7 +1402,10 @@
                           "    const response = pm.response.json();\r",
                           "    pm.expect(response.data.id).to.exist;\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"productSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1366,7 +1436,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 19: Get product with non existing ID",
+                  "name": "TC-19: Get product with non existing ID",
                   "event": [
                     {
                       "listen": "test",
@@ -1380,7 +1450,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"not found\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1411,7 +1484,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 20: Sort products by price in descending order",
+                  "name": "TC-20: Sort products by price in descending order",
                   "event": [
                     {
                       "listen": "test",
@@ -1469,7 +1542,7 @@
               "name": "ProductPostTests",
               "item": [
                 {
-                  "name": "Test case 21: Create product with valid details",
+                  "name": "TC-21: Create product with valid details",
                   "event": [
                     {
                       "listen": "test",
@@ -1490,6 +1563,10 @@
                           "    pm.expect(body.data.name).to.be.eq(pm.variables.get(\"PRODUCT_NAME\"));\r",
                           "    pm.expect(body.data.price).to.be.eq(pm.variables.get(\"PRODUCT_PRICE\"));\r",
                           "    pm.expect(body.data.stock).to.be.eq(pm.variables.get(\"PRODUCT_STOCK\"));\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"productSchema\")));\r",
                           "});\r",
                           "\r",
                           ""
@@ -1545,7 +1622,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 22: Create product with negative price",
+                  "name": "TC-22: Create product with negative price",
                   "event": [
                     {
                       "listen": "test",
@@ -1560,7 +1637,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"price must be > 0\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1613,7 +1693,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 23: Create product with empty product name",
+                  "name": "TC-23: Create product with empty product name",
                   "event": [
                     {
                       "listen": "test",
@@ -1628,7 +1708,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"must NOT have fewer than 1 characters\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1679,7 +1762,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 24: Create product with negative stock",
+                  "name": "TC-24: Create product with negative stock",
                   "event": [
                     {
                       "listen": "test",
@@ -1694,7 +1777,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"stock must be >= 0\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1752,7 +1838,7 @@
               "name": "ProductUpdateTests",
               "item": [
                 {
-                  "name": "Test case 25: Update product with valid details",
+                  "name": "TC-25: Update product with valid details",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1840,7 +1926,10 @@
                           "    pm.expect(body.data.price).to.be.eq(pm.variables.get(\"PROD_PRICE_UPDATED\"));\r",
                           "    pm.expect(body.data.stock).to.be.eq(pm.variables.get(\"PROD_STOCK_UPDATED\"));\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"productSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1880,7 +1969,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 26: Update product with negative price",
+                  "name": "TC-26: Update product with negative price",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -1950,7 +2039,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"price must be > 0\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -1990,7 +2082,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 27: Update product with empty name",
+                  "name": "TC-27: Update product with empty name",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2060,7 +2152,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"name must NOT have fewer than 1 characters\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -2100,7 +2195,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 28: Update product with negative stock",
+                  "name": "TC-28: Update product with negative stock",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2170,7 +2265,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"stock must be >= 0\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -2215,7 +2313,7 @@
               "name": "ProductDeleteTests",
               "item": [
                 {
-                  "name": "Test case 29: Delete product with valid ID",
+                  "name": "TC-29: Delete product with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2312,7 +2410,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 30: Delete product with non existing ID",
+                  "name": "TC-30: Delete product with non existing ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2336,6 +2434,10 @@
                           "pm.test(\"Response body message indicates product was not found\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.eq(\"product not found\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -2367,7 +2469,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 31: Delete user with invalid ID format",
+                  "name": "TC-31: Delete product with invalid ID format",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2391,6 +2493,10 @@
                           "pm.test(\"Response body message indicates invalid ID format\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -2432,7 +2538,7 @@
               "name": "OrderGetTests",
               "item": [
                 {
-                  "name": "Test case 32: Get all orders",
+                  "name": "TC- 32: Get all orders",
                   "event": [
                     {
                       "listen": "test",
@@ -2446,7 +2552,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.data).to.be.an(\"array\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"orderListSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -2480,7 +2589,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 33: Get order with valid ID",
+                  "name": "TC-33: Get order with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2552,7 +2661,10 @@
                           "    const response = pm.response.json();\r",
                           "    pm.expect(response.data.id).to.exist;\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"orderSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -2583,7 +2695,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 34: Get order with non existing ID",
+                  "name": "TC-34: Get order with non existing ID",
                   "event": [
                     {
                       "listen": "test",
@@ -2596,6 +2708,10 @@
                           "pm.test(\"Response body message indicates resource not found\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"not found\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});\r",
                           ""
                         ],
@@ -2628,7 +2744,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 35: Get order with invalid ID format",
+                  "name": "TC-35: Get order with invalid ID format",
                   "event": [
                     {
                       "listen": "test",
@@ -2641,6 +2757,10 @@
                           "pm.test(\"Response body message indicates invalid ID format\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});\r",
                           ""
                         ],
@@ -2678,7 +2798,7 @@
               "name": "OrderPostTests",
               "item": [
                 {
-                  "name": "Test case 36: Create order with valid details",
+                  "name": "TC-36: Create order with valid details",
                   "event": [
                     {
                       "listen": "test",
@@ -2700,6 +2820,9 @@
                           "    pm.expect(body.data.status).to.be.eq(pm.variables.get(\"ORDER_STATUS\"));\r",
                           "});\r",
                           "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"orderSchema\")));\r",
+                          "});\r",
                           ""
                         ],
                         "type": "text/javascript",
@@ -2750,7 +2873,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 37: Create order with zero quantity",
+                  "name": "TC-37: Create order with zero quantity",
                   "event": [
                     {
                       "listen": "test",
@@ -2764,7 +2887,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contains(\"quantity must be >= 1\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -2814,7 +2940,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 38: Create order with non existing status",
+                  "name": "TC-38: Create order with non existing status",
                   "event": [
                     {
                       "listen": "test",
@@ -2827,6 +2953,10 @@
                           "pm.test(\"Response body message indicates value is not allowed\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contains(\"status must be equal to one of the allowed values\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});\r",
                           ""
                         ],
@@ -2883,7 +3013,7 @@
               "name": "OrderUpdateTests",
               "item": [
                 {
-                  "name": "Test case 39: Update order with valid details",
+                  "name": "TC-39: Update order with valid details",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -2968,6 +3098,10 @@
                           "    pm.expect(body.data.status).to.be.eq(pm.variables.get(\"ORDER_STATUS\"));\r",
                           "    pm.expect(body.data.quantity).to.be.eq(pm.variables.get(\"ORDER_QUANTITY\"));\r",
                           "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"orderSchema\")));\r",
+                          "});\r",
                           ""
                         ],
                         "type": "text/javascript",
@@ -3008,7 +3142,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 40: Update order with non existing status",
+                  "name": "TC-40: Update order with non existing status",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -3078,7 +3212,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"must be equal to one of the allowed values\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -3118,7 +3255,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 41: Update order with zero quantity",
+                  "name": "TC-41: Update order with zero quantity",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -3189,7 +3326,10 @@
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"quantity must be >= 1\");\r",
                           "});\r",
-                          ""
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
+                          "});"
                         ],
                         "type": "text/javascript",
                         "packages": {},
@@ -3234,7 +3374,7 @@
               "name": "OrderDeleteTests",
               "item": [
                 {
-                  "name": "Test case 42: Delete order with valid ID",
+                  "name": "TC-42: Delete order with valid ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -3329,7 +3469,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 43: Delete order with non existing ID",
+                  "name": "TC-43: Delete order with non existing ID",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -3353,6 +3493,10 @@
                           "pm.test(\"Response body message indicates order was not found\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.eq(\"order not found\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -3384,7 +3528,7 @@
                   "response": []
                 },
                 {
-                  "name": "Test case 44: Delete order with invalid ID format",
+                  "name": "TC-44: Delete order with invalid ID format",
                   "event": [
                     {
                       "listen": "prerequest",
@@ -3408,6 +3552,10 @@
                           "pm.test(\"Response body message indicates invalid ID format\", function () {\r",
                           "    const body = pm.response.json();\r",
                           "    pm.expect(body.message).to.contain(\"match format\");\r",
+                          "});\r",
+                          "\r",
+                          "pm.test(\"Response body matches schema\", function () {\r",
+                          "     pm.response.to.have.jsonSchema(JSON.parse(pm.collectionVariables.get(\"errorSchema\")));\r",
                           "});"
                         ],
                         "type": "text/javascript",
@@ -3446,7 +3594,7 @@
           "name": "🔄E2E Workflow",
           "item": [
             {
-              "name": "Test case 45: Complete Order Creation Flow",
+              "name": "TC-45: Complete Order Creation Flow",
               "item": [
                 {
                   "name": "Step 1: Create user with valid details",
@@ -3536,8 +3684,8 @@
                       "script": {
                         "exec": [
                           "const body = pm.response.json();\r",
-                          "const userID = body.data.id;\r",
-                          "pm.collectionVariables.set(\"productID\", userID); // {{userID}}\r",
+                          "const productID = body.data.id;\r",
+                          "pm.collectionVariables.set(\"productID\", productID); \r",
                           "\r",
                           "pm.test(\"Response status code is 201\", function () {\r",
                           "    pm.response.to.have.status(201);\r",
@@ -3734,7 +3882,7 @@
               ]
             },
             {
-              "name": "Test case 46: Update User Name Flow",
+              "name": "TC-46: Update User Name Flow",
               "item": [
                 {
                   "name": "Step 1: Create user with valid details",
@@ -3946,7 +4094,7 @@
               ]
             },
             {
-              "name": "Test case 47: Place Complete Order Before User Deletion Flow",
+              "name": "TC-47: Place Complete Order Before User Deletion Flow",
               "item": [
                 {
                   "name": "Step 1: Create user with valid details",
@@ -4036,8 +4184,8 @@
                       "script": {
                         "exec": [
                           "const body = pm.response.json();\r",
-                          "const userID = body.data.id;\r",
-                          "pm.collectionVariables.set(\"productID\", userID); // {{userID}}\r",
+                          "const productID = body.data.id;\r",
+                          "pm.collectionVariables.set(\"productID\", productID); \r",
                           "\r",
                           "pm.test(\"Response status code is 201\", function () {\r",
                           "    pm.response.to.have.status(201);\r",
@@ -4285,7 +4433,7 @@
                       "variable": [
                         {
                           "key": "id",
-                          "value": "{{userID}}"
+                          "value": "{{orderID}}"
                         }
                       ]
                     }
@@ -4295,7 +4443,7 @@
               ]
             },
             {
-              "name": "Test case 48: Create Order for a Product that is out of Stock",
+              "name": "TC-48: Create Order for a Product that is out of Stock",
               "item": [
                 {
                   "name": "Step 1: Create user with valid details",
@@ -4385,8 +4533,8 @@
                       "script": {
                         "exec": [
                           "const body = pm.response.json();\r",
-                          "const userID = body.data.id;\r",
-                          "pm.collectionVariables.set(\"productID\", userID); // {{userID}}\r",
+                          "const productID = body.data.id;\r",
+                          "pm.collectionVariables.set(\"productID\", productID); // {{userID}}\r",
                           "\r",
                           "pm.test(\"Response status code is 201\", function () {\r",
                           "    pm.response.to.have.status(201);\r",
@@ -4616,6 +4764,24 @@
         "packages": {},
         "requests": {},
         "exec": [
+          "// ========================================\r",
+          "// GLOBAL POST-REQUEST SCRIPT\r",
+          "// Runs after every request is succesfully sent\r",
+          "// ========================================\r",
+          "\r",
+          "//Log request information\r",
+          "console.log(\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\");\r",
+          "console.log(\"Test Name:\", pm.info.requestName);\r",
+          "console.log(\"Http Method:\", pm.request.method);\r",
+          "console.log(\"URL:\", pm.variables.replaceIn(pm.request.url.toString()));\r",
+          "if (pm.request.body && pm.request.body.mode === \"raw\") {\r",
+          "    console.log(\"Request Body:\", pm.variables.replaceIn(pm.request.body.raw));\r",
+          "}\r",
+          "console.log(\"Timestamp:\", new Date().toISOString());\r",
+          "console.log(\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\");``\r",
+          "\r",
+          "\r",
+          "// Common validation on response time and Content-Type\r",
           "pm.test(\"Response time is below 2000 ms\", function () {\r",
           "    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
           "});\r",
@@ -4625,7 +4791,9 @@
           "        pm.expect(pm.response.headers.get(\"Content-Type\"))\r",
           "            .to.include(\"application/json\");\r",
           "    });\r",
-          "}"
+          "}\r",
+          "\r",
+          ""
         ]
       }
     }
@@ -4646,6 +4814,34 @@
     {
       "key": "validUserID",
       "value": ""
+    },
+    {
+      "key": "userListSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\"success\", \"data\", \"pagination\"],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\"id\", \"name\", \"email\", \"role\", \"created_at\"],\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\",\n            \"format\": \"uuid\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"email\": {\n            \"type\": \"string\",\n            \"format\": \"email\"\n          },\n          \"role\": {\n            \"type\": \"string\"\n          },\n          \"created_at\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n          }\n        }\n      }\n    },\n    \"pagination\": {\n      \"type\": \"object\",\n      \"required\": [\"total\", \"page\", \"limit\", \"pages\", \"hasNext\", \"hasPrev\"],\n      \"properties\": {\n        \"total\": {\n          \"type\": \"integer\"\n        },\n        \"page\": {\n          \"type\": \"integer\"\n        },\n        \"limit\": {\n          \"type\": \"integer\"\n        },\n        \"pages\": {\n          \"type\": \"integer\"\n        },\n        \"hasNext\": {\n          \"type\": \"boolean\"\n        },\n        \"hasPrev\": {\n          \"type\": \"boolean\"\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "key": "userSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"success\",\n    \"data\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"object\",\n      \"required\": [\n        \"id\",\n        \"name\",\n        \"email\",\n        \"role\",\n        \"created_at\"\n      ],\n      \"properties\": {\n        \"id\": {\n          \"type\": \"string\",\n          \"format\": \"uuid\"\n        },\n        \"name\": {\n          \"type\": \"string\"\n        },\n        \"email\": {\n          \"type\": \"string\",\n          \"format\": \"email\"\n        },\n        \"role\": {\n          \"type\": \"string\"\n        },\n        \"created_at\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "key": "errorSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"error\",\n    \"message\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"error\": {\n      \"type\": \"string\"\n    },\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}"
+    },
+    {
+      "key": "productListSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"success\",\n    \"data\",\n    \"pagination\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\n          \"id\",\n          \"name\",\n          \"price\",\n          \"description\",\n          \"stock\",\n          \"category\",\n          \"created_at\"\n        ],\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\",\n            \"format\": \"uuid\"\n          },\n          \"name\": {\n            \"type\": \"string\"\n          },\n          \"price\": {\n            \"type\": \"number\"\n          },\n          \"description\": {\n            \"type\": \"string\"\n          },\n          \"stock\": {\n            \"type\": \"integer\"\n          },\n          \"category\": {\n            \"type\": \"string\"\n          },\n          \"created_at\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n          }\n        }\n      }\n    },\n    \"pagination\": {\n      \"type\": \"object\",\n      \"required\": [\n        \"total\",\n        \"page\",\n        \"limit\",\n        \"pages\",\n        \"hasNext\",\n        \"hasPrev\"\n      ],\n      \"properties\": {\n        \"total\": {\n          \"type\": \"integer\"\n        },\n        \"page\": {\n          \"type\": \"integer\"\n        },\n        \"limit\": {\n          \"type\": \"integer\"\n        },\n        \"pages\": {\n          \"type\": \"integer\"\n        },\n        \"hasNext\": {\n          \"type\": \"boolean\"\n        },\n        \"hasPrev\": {\n          \"type\": \"boolean\"\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "key": "productSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"success\",\n    \"data\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"object\",\n      \"required\": [\n        \"id\",\n        \"name\",\n        \"price\",\n        \"description\",\n        \"stock\",\n        \"category\",\n        \"created_at\"\n      ],\n      \"properties\": {\n        \"id\": {\n          \"type\": \"string\",\n          \"format\": \"uuid\"\n        },\n        \"name\": {\n          \"type\": \"string\"\n        },\n        \"price\": {\n          \"type\": \"number\"\n        },\n        \"description\": {\n          \"type\": \"string\"\n        },\n        \"stock\": {\n          \"type\": \"integer\"\n        },\n        \"category\": {\n          \"type\": \"string\"\n        },\n        \"created_at\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "key": "orderListSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"success\",\n    \"data\",\n    \"pagination\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"required\": [\n          \"id\",\n          \"quantity\",\n          \"status\",\n          \"notes\",\n          \"created_at\"\n        ],\n        \"properties\": {\n          \"id\": {\n            \"type\": \"string\",\n            \"format\": \"uuid\"\n          },\n          \"quantity\": {\n            \"type\": \"integer\"\n          },\n          \"status\": {\n            \"type\": \"string\"\n          },\n          \"notes\": {\n            \"type\": \"string\"\n          },\n          \"created_at\": {\n            \"type\": \"string\",\n            \"format\": \"date-time\"\n          }\n        }\n      }\n    },\n    \"pagination\": {\n      \"type\": \"object\",\n      \"required\": [\n        \"total\",\n        \"page\",\n        \"limit\",\n        \"pages\",\n        \"hasNext\",\n        \"hasPrev\"\n      ],\n      \"properties\": {\n        \"total\": {\n          \"type\": \"integer\"\n        },\n        \"page\": {\n          \"type\": \"integer\"\n        },\n        \"limit\": {\n          \"type\": \"integer\"\n        },\n        \"pages\": {\n          \"type\": \"integer\"\n        },\n        \"hasNext\": {\n          \"type\": \"boolean\"\n        },\n        \"hasPrev\": {\n          \"type\": \"boolean\"\n        }\n      }\n    }\n  }\n}"
+    },
+    {
+      "key": "orderSchema",
+      "value": "{\n  \"type\": \"object\",\n  \"required\": [\n    \"success\",\n    \"data\"\n  ],\n  \"properties\": {\n    \"success\": {\n      \"type\": \"boolean\"\n    },\n    \"data\": {\n      \"type\": \"object\",\n      \"required\": [\n        \"id\",\n        \"quantity\",\n        \"status\",\n        \"notes\",\n        \"created_at\"\n      ],\n      \"properties\": {\n        \"id\": {\n          \"type\": \"string\",\n          \"format\": \"uuid\"\n        },\n        \"quantity\": {\n          \"type\": \"integer\"\n        },\n        \"status\": {\n          \"type\": \"string\"\n        },\n        \"notes\": {\n          \"type\": \"string\"\n        },\n        \"created_at\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        }\n      }\n    }\n  }\n}"
     }
   ]
 }
