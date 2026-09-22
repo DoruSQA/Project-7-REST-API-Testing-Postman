@@ -7,7 +7,7 @@
 ![Requests](https://img.shields.io/badge/API%20Requests-60-purple)
 ![E2E](https://img.shields.io/badge/E2E%20Workflows-4-red)
 
-A comprehensive **Postman API testing project** created to demonstrate practical QA Automation skills through functional, negative, integration, and end-to-end testing of an e-commerce REST API.
+A comprehensive **REST API testing project built with Postman** for an e-commerce application, covering functional, negative, integration, and end-to-end scenarios.
 > **Note:** This project is part of my personal QA Automation portfolio.
 
 ---
